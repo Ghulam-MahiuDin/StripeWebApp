@@ -1,22 +1,50 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <title>Buy cool new product</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://js.stripe.com/v3/"></script>
-</head>
-<body>
-    <section>
-        <div class="product">
-            <img src="https://i.imgur.com/EHyR2nP.png" alt="The cover of Stubborn Attachments" />
-            <div class="description">
-                <h3>Stubborn Attachments</h3>
-                <h5>$20.00</h5>
-            </div>
+﻿@model IEnumerable<StripeWebApp.Models.Item>
+
+
+    <style>
+        .item:hover
+        {
+            opacity:1;
+        }
+
+    .itemImg:hover {
+        opacity:1;
+    }
+
+    .itemImg{
+        margin-top:30px;
+    }
+
+    .itemBtn {
+        margin-top: 30px;
+        display:flex;
+        justify-content:center;
+       
+    }
+
+
+    </style>
+    <div class="container">
+
+        <div class="row">
+            @foreach (var item in Model)
+            {
+            <div class="col-3">
+                <div class="item">
+                    <form class="d-flex justify-content-center" style="position:relative" asp-action="Create" method="post">
+                        <input type="hidden" name="Id" value="@item.Id" />
+                        <h6 class="itemTitle" name="Name" style="position:absolute;top:40;">@item.Name </h6>
+                        <img class="itemImg" name="ImageUrl" src="@item.ImageUrl" style="width:70%;" />
+                        <input type="hidden" name="PriceID" value="@item.PriceID" />
+                       
+                   
+                        <input class="itemBtn btn btn-dark" type="submit" value="CheckOut" style="position:absolute;top:60%;" />
+                    </form>
+                    </div>
+
+              </div>
+        }
+
+
         </div>
-        <form asp-action="Create" method="POST">
-            <button type="submit" id="checkout-button">Checkout</button>
-        </form>
-    </section>
-</body>
-</html>
+    </div>

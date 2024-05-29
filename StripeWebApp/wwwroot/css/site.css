@@ -1,4 +1,4 @@
-html {
+/*html {
   font-size: 14px;
 }
 
@@ -19,4 +19,19 @@ html {
 
 body {
   margin-bottom: 60px;
+}*/
+/*.item:hover {
+    opacity:1;
 }
+
+.itemTitle .itemBtn {
+    opacity: 0;
+}
+
+.item:hover .itemTitle, item:hover .itemBtn {
+    opacity:1;
+}
+
+item:hover .itemImg {
+    opacity: 0.4;
+}*/

@@ -1,20 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.BillingPortal;
 using Stripe.Checkout;
+using StripeWebApp.Data;
+using StripeWebApp.Models;
 
 namespace StripeWebApp.Controllers
 {
     public class PaymentController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+        public PaymentController(ApplicationDbContext dbContext)
         {
-            return View();
+            _context = dbContext;
+        }
+        public async Task<IActionResult> Index()
+        {
+            return View(await _context.Items.ToListAsync());
         }
         [HttpPost]
-        public ActionResult Create()
+        public ActionResult Create([Bind("Id,Name,ImageUrl,PriceID")] Item item)
         {
-            var domain = "http://localhost:4242";
+            var domain = "https://localhost:7113";
             var options = new Stripe.Checkout.SessionCreateOptions
             {
                 LineItems = new List<SessionLineItemOptions>
@@ -22,13 +30,14 @@ namespace StripeWebApp.Controllers
                   new SessionLineItemOptions
                   {
                     // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    Price = "price_1PLfksHaaqG3CBCGar0G1PdA",
+                      Price =$"{item.PriceID}",
+                      //Price = "price_1PLfksHaaqG3CBCGar0G1PdA",
                     Quantity = 1,
                   },
                 },
                 Mode = "payment",
-                SuccessUrl = domain + "/Payment/Success.cshtml",
-                CancelUrl = domain + "/Payment/Cancel.cshtml",
+                SuccessUrl = domain + "/Payment/Success",
+                CancelUrl = domain + "/Payment/Cancel",
             };
             var service = new Stripe.Checkout.SessionService();
             Stripe.Checkout.Session session = service.Create(options);
